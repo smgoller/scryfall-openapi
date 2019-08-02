@@ -734,7 +734,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/bulk_data'
+                $ref: '#/components/schemas/bulk_data_list'
         default:
           $ref: '#/components/responses/error'
 components:
@@ -1374,6 +1374,64 @@ components:
             The Content-Encoding encoding that will be used to transmit this
             file when you download it.
           example: gzip
+    bulk_data_list:
+      type: object
+      properties:
+        has_more:
+          type: boolean
+        next_page:
+          nullable: true
+          format: uri
+          type: string
+        warnings:
+          nullable: true
+          type: array
+          items:
+            type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/bulk_data'
+    error:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: An integer HTTP status code for this error.
+          example: 400
+        code:
+          type: string
+          description: >-
+            A computer-friendly string representing the appropriate HTTP
+            status code.
+          example: bad_request
+        details:
+          type: string
+          description: A human-readable string explaining the error.
+          example: All of your terms were ignored.
+        type:
+          type: string
+          description: >-
+            A computer-friendly string that provides additional context
+            for the main error. For example, an endpoint many generate
+            HTTP 404 errors for different kinds of input. This field will
+            provide a label for the specific kind of 404 failure, such as
+            `ambiguous`.
+          example: ambiguous
+        warnings:
+          type: array
+          items:
+            type: string
+          description: >-
+            If your input also generated non-failure warnings, they will
+            be provided as human-readable strings in this array.
+          example:
+            - >-
+              Invalid expression "is:slick" was ignored. Checking if cards
+              are "slick" is not supported
+            - >-
+              Invalid expression "cmc>cmc" was ignored. The sides of your
+              comparison must be different.
   parameters:
     format:
       name: format
@@ -1408,42 +1466,5 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              status:
-                type: integer
-                description: An integer HTTP status code for this error.
-                example: 400
-              code:
-                type: string
-                description: >-
-                  A computer-friendly string representing the appropriate HTTP
-                  status code.
-                example: bad_request
-              details:
-                type: string
-                description: A human-readable string explaining the error.
-                example: All of your terms were ignored.
-              type:
-                type: string
-                description: >-
-                  A computer-friendly string that provides additional context
-                  for the main error. For example, an endpoint many generate
-                  HTTP 404 errors for different kinds of input. This field will
-                  provide a label for the specific kind of 404 failure, such as
-                  `ambiguous`.
-                example: ambiguous
-              warnings:
-                type: array
-                items:
-                  type: string
-                description: >-
-                  If your input also generated non-failure warnings, they will
-                  be provided as human-readable strings in this array.
-                example:
-                  - >-
-                    Invalid expression "is:slick" was ignored. Checking if cards
-                    are "slick" is not supported
-                  - >-
-                    Invalid expression "cmc>cmc" was ignored. The sides of your
-                    comparison must be different.
+            $ref: "#/components/schemas/error"
+  
