@@ -782,16 +782,13 @@ components:
       enum:
         - standard
         - future
-        - frontier
         - modern
         - legacy
         - pauper
         - vintage
         - penny
         - commander
-        - 1v1
         - duel
-        - brawl
     legal_status:
       enum:
         - legal
