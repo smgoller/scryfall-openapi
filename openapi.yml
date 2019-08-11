@@ -175,49 +175,18 @@ paths:
         - name: unique
           in: query
           required: false
-          x-ms-enum:
-            name: unique_strategy
-            modelAsString: false
           schema:
-            type: string
-            enum:
-              - cards
-              - art
-              - prints
+            $ref: "#/components/schemas/uniqueness_strategy"
         - name: order
           in: query
           required: false
-          x-ms-enum:
-            name: sort_order
-            modelAsString: false
           schema:
-            type: string
-            enum:
-              - name
-              - set
-              - released
-              - rarity
-              - color
-              - usd
-              - tix
-              - eur
-              - cmc
-              - power
-              - toughness
-              - edhrec
-              - artist
+            $ref: "#/components/schemas/sort_order"
         - name: dir
           in: query
           required: false
-          x-ms-enum:
-            name: sort_direction
-            modelAsString: false
           schema:
-            type: string
-            enum:
-              - auto
-              - asc
-              - desc
+            $ref: "#/components/schemas/sort_direction"
         - name: include_extras
           in: query
           required: false
@@ -739,178 +708,291 @@ paths:
           $ref: '#/components/responses/error'
 components:
   schemas:
+    layout_type:
+      enum:
+      - normal
+      - split
+      - flip
+      - transform
+      - meld
+      - leveler
+      - saga
+      - planar
+      - scheme
+      - vanguard
+      - token
+      - double_faced_token
+      - emblem
+      - augment
+      - host
+      type: string
+    rarity:
+      enum:
+        - common
+        - uncommon
+        - rare
+        - mythic
+      type: string
+    uniqueness_strategy:
+      type: string
+      enum:
+        - cards
+        - art
+        - prints
+    sort_order:
+      type: string
+      enum:
+        - name
+        - set
+        - released
+        - rarity
+        - color
+        - usd
+        - tix
+        - eur
+        - cmc
+        - power
+        - toughness
+        - edhrec
+        - artist
+    sort_direction:
+      type: string
+      enum:
+        - auto
+        - asc
+        - desc
+    border_color:
+      enum:
+        - black
+        - borderless
+        - gold
+        - silver
+        - white
+      type: string
+    color:
+      enum:
+        - W
+        - U
+        - B
+        - R
+        - G
+      type: string
+    legality_format:
+      type: string
+      enum:
+        - standard
+        - future
+        - frontier
+        - modern
+        - legacy
+        - pauper
+        - vintage
+        - penny
+        - commander
+        - 1v1
+        - duel
+        - brawl
+    legal_status:
+      enum:
+        - legal
+        - not_legal
+        - restricted
+        - banned
+      type: string
+    set_type:
+      type: string
+      enum:
+        - core
+        - expansion
+        - masters
+        - masterpiece
+        - from_the_vault
+        - spellbook
+        - premium_deck
+        - duel_deck
+        - draft_innovation
+        - treasure_chest
+        - commander
+        - planechase
+        - archenemy
+        - vanguard
+        - funny
+        - starter
+        - box
+        - promo
+        - token
+        - memorabilia
+      description: >
+        A computer-readable classification for this set.
+
+
+        * core - A yearly Magic core set (Tenth Edition, etc)
+
+        * expansion - A rotational expansion set in a block (Zendikar, etc)
+
+        * masters - A reprint set that contains no new cards (Modern
+        Masters, etc)
+
+        * masterpiece - Masterpiece Series premium foil cards
+
+        * from_the_vault - From the Vault gift sets
+
+        * spellbook - Spellbook series gift sets
+
+        * premium_deck - Premium Deck Series decks
+
+        * duel_deck - Duel Decks
+
+        * draft_innovation - Special draft sets, like Conspiracy and
+        Battlebond
+
+        * treasure_chest - Magic Online treasure chest prize sets
+
+        * commander - Commander preconstructed decks
+
+        * planechase - Planechase sets
+
+        * archenemy - Archenemy sets
+
+        * vanguard - Vanguard card sets
+
+        * funny - A funny un-set or set with funny promos (Unglued, Happy
+        Holidays, etc)
+
+        * starter - A starter/introductory set (Portal, etc)
+
+        * box - A gift box set
+
+        * promo - A set that contains purely promotional cards
+
+        * token - A set made up of tokens and emblems.
+
+        * memorabilia - A set made up of gold-bordered, oversize, or trophy
+        cards that are not legal
+    image_uri_type:
+      type: string
+      enum:
+        - small
+        - normal
+        - large
+        - png
+        - art_crop
+        - border_crop
     card:
-      type: object
-      properties:
-        id:
-          format: uuid
-          type: string
-        oracle_id:
-          format: uuid
-          type: string
-        multiverse_ids:
-          type: array
-          items:
-            type: integer
-        mtgo_id:
-          type: integer
-        arena_id:
-          type: integer
-        mtgo_foil_id:
-          type: integer
-        uri:
-          format: uri
-          type: string
-        scryfall_uri:
-          format: uri
-          type: string
-        prints_search_uri:
-          format: uri
-          type: string
-        rulings_uri:
-          format: uri
-          type: string
-        name:
-          type: string
-        layout:
-          enum:
-            - normal
-            - split
-            - flip
-            - transform
-            - meld
-            - leveler
-            - saga
-            - planar
-            - scheme
-            - vanguard
-            - token
-            - double_faced_token
-            - emblem
-            - augment
-            - host
-          type: string
-          x-ms-enum:
-            name: layouts
-            modelAsString: false
-        cmc:
-          format: double
-          type: number
-        type_line:
-          type: string
-        oracle_text:
-          type: string
-        mana_cost:
-          type: string
-        power:
-          type: string
-        toughness:
-          type: string
-        loyalty:
-          type: string
-        life_modifier:
-          type: string
-        hand_modifier:
-          type: string
-        colors:
-          type: array
-          items:
-            $ref: '#/components/schemas/colors'
-        color_indicator:
-          type: array
-          items:
-            $ref: '#/components/schemas/colors'
-        color_identity:
-          type: array
-          items:
-            $ref: '#/components/schemas/colors'
-        all_parts:
-          type: array
-          items:
-            $ref: '#/components/schemas/related_cards'
-        card_faces:
-          type: array
-          items:
-            $ref: '#/components/schemas/card_face'
-        legalities:
-          $ref: '#/components/schemas/legality'
-        reserved:
-          type: boolean
-        edhrec_rank:
-          format: int32
-          type: integer
-        set:
-          type: string
-        set_name:
-          type: string
-        collector_number:
-          type: string
-        set_search_uri:
-          type: string
-        scryfall_set_uri:
-          format: uri
-          type: string
-        image_uris:
-          $ref: '#/components/schemas/image_uri'
-        highres_image:
-          type: boolean
-        reprint:
-          type: boolean
-        digital:
-          type: boolean
-        rarity:
-          enum:
-            - common
-            - uncommon
-            - rare
-            - mythic
-          type: string
-          x-ms-enum:
-            name: rarity
-            modelAsString: false
-        flavor_text:
-          type: string
-        artist:
-          type: string
-        illustration_id:
-          format: uuid
-          type: string
-        frame:
-          type: string
-        full_art:
-          type: boolean
-        watermark:
-          type: string
-        border_color:
-          enum:
-            - black
-            - borderless
-            - gold
-            - silver
-            - white
-          type: string
-          x-ms-enum:
-            name: border_colors
-            modelAsString: false
-        story_spotlight_number:
-          type: integer
-        story_spotlight_uri:
-          format: uri
-          type: string
-        timeshifted:
-          type: boolean
-        colorshifted:
-          type: boolean
-        futureshifted:
-          type: boolean
-        purchase_uris:
-          type: object
-          additionalProperties:
-            type: string
-        related_uris:
-          type: object
-          additionalProperties:
-            type: string
+      allOf:
+        - $ref: "#/components/schemas/card_face"
+        - type: object
+          properties:
+            id:
+              format: uuid
+              type: string
+            oracle_id:
+              format: uuid
+              type: string
+            multiverse_ids:
+              type: array
+              items:
+                type: integer
+            mtgo_id:
+              type: integer
+            arena_id:
+              type: integer
+            mtgo_foil_id:
+              type: integer
+            uri:
+              format: uri
+              type: string
+            scryfall_uri:
+              format: uri
+              type: string
+            prints_search_uri:
+              format: uri
+              type: string
+            rulings_uri:
+              format: uri
+              type: string
+            layout:
+              $ref: "#/components/schemas/layout_type"
+            cmc:
+              format: double
+              type: number
+            life_modifier:
+              type: string
+            hand_modifier:
+              type: string
+            color_identity:
+              type: array
+              items:
+                $ref: '#/components/schemas/color'
+            all_parts:
+              type: array
+              items:
+                $ref: '#/components/schemas/related_cards'
+            card_faces:
+              type: array
+              items:
+                $ref: '#/components/schemas/card_face'
+            legalities:
+              type: object
+              x-dictionary-key:
+                $ref: '#/components/schemas/legality_format'
+              additionalProperties:
+                $ref: '#/components/schemas/legal_status'
+            reserved:
+              type: boolean
+            edhrec_rank:
+              format: int32
+              type: integer
+            set:
+              type: string
+            set_name:
+              type: string
+            collector_number:
+              type: string
+            set_search_uri:
+              type: string
+            scryfall_set_uri:
+              format: uri
+              type: string
+            highres_image:
+              type: boolean
+            reprint:
+              type: boolean
+            digital:
+              type: boolean
+            rarity:
+              $ref: "#/components/schemas/rarity"
+            artist:
+              type: string
+            frame:
+              type: string
+            full_art:
+              type: boolean
+            watermark:
+              type: string
+            border_color:
+              $ref: "#/components/schemas/border_color"
+            story_spotlight_number:
+              type: integer
+            story_spotlight_uri:
+              format: uri
+              type: string
+            timeshifted:
+              type: boolean
+            colorshifted:
+              type: boolean
+            futureshifted:
+              type: boolean
+            purchase_uris:
+              type: object
+              additionalProperties:
+                type: string
+                format: uri
+            related_uris:
+              type: object
+              additionalProperties:
+                type: string
+                format: uri
     card_face:
       type: object
       properties:
@@ -925,11 +1007,11 @@ components:
         colors:
           type: array
           items:
-            $ref: '#/components/schemas/colors'
+            $ref: '#/components/schemas/color'
         color_indicator:
           type: array
           items:
-            $ref: '#/components/schemas/colors'
+            $ref: '#/components/schemas/color'
         power:
           type: string
         toughness:
@@ -942,76 +1024,12 @@ components:
           format: uuid
           type: string
         image_uris:
-          $ref: '#/components/schemas/image_uri'
-    colors:
-      enum:
-        - W
-        - U
-        - B
-        - R
-        - G
-      type: string
-      x-ms-enum:
-        name: colors
-        modelAsString: false
-    legality:
-      type: object
-      properties:
-        standard:
-          $ref: '#/components/schemas/legal_status'
-        future:
-          $ref: '#/components/schemas/legal_status'
-        frontier:
-          $ref: '#/components/schemas/legal_status'
-        modern:
-          $ref: '#/components/schemas/legal_status'
-        legacy:
-          $ref: '#/components/schemas/legal_status'
-        pauper:
-          $ref: '#/components/schemas/legal_status'
-        vintage:
-          $ref: '#/components/schemas/legal_status'
-        penny:
-          $ref: '#/components/schemas/legal_status'
-        commander:
-          $ref: '#/components/schemas/legal_status'
-        1v1:
-          $ref: '#/components/schemas/legal_status'
-        duel:
-          $ref: '#/components/schemas/legal_status'
-        brawl:
-          $ref: '#/components/schemas/legal_status'
-    legal_status:
-      enum:
-        - legal
-        - not_legal
-        - restricted
-        - banned
-      type: string
-      x-ms-enum:
-        name: legal_status
-        modelAsString: false
-    image_uri:
-      type: object
-      properties:
-        small:
-          format: uri
-          type: string
-        normal:
-          format: uri
-          type: string
-        large:
-          format: uri
-          type: string
-        png:
-          format: uri
-          type: string
-        art_crop:
-          format: uri
-          type: string
-        border_crop:
-          format: uri
-          type: string
+          type: object
+          x-dictionary-key:
+            $ref: '#/components/schemas/image_uri_type'
+          additionalProperties:
+            type: string
+            format: uri
     related_cards:
       type: object
       properties:
@@ -1064,78 +1082,7 @@ components:
           description: The English name of the set.
           example: Aether Revolt
         set_type:
-          type: string
-          enum:
-            - core
-            - expansion
-            - masters
-            - masterpiece
-            - from_the_vault
-            - spellbook
-            - premium_deck
-            - duel_deck
-            - draft_innovation
-            - treasure_chest
-            - commander
-            - planechase
-            - archenemy
-            - vanguard
-            - funny
-            - starter
-            - box
-            - promo
-            - token
-            - memorabilia
-          description: >
-            A computer-readable classification for this set.
-
-
-            * core - A yearly Magic core set (Tenth Edition, etc)
-
-            * expansion - A rotational expansion set in a block (Zendikar, etc)
-
-            * masters - A reprint set that contains no new cards (Modern
-            Masters, etc)
-
-            * masterpiece - Masterpiece Series premium foil cards
-
-            * from_the_vault - From the Vault gift sets
-
-            * spellbook - Spellbook series gift sets
-
-            * premium_deck - Premium Deck Series decks
-
-            * duel_deck - Duel Decks
-
-            * draft_innovation - Special draft sets, like Conspiracy and
-            Battlebond
-
-            * treasure_chest - Magic Online treasure chest prize sets
-
-            * commander - Commander preconstructed decks
-
-            * planechase - Planechase sets
-
-            * archenemy - Archenemy sets
-
-            * vanguard - Vanguard card sets
-
-            * funny - A funny un-set or set with funny promos (Unglued, Happy
-            Holidays, etc)
-
-            * starter - A starter/introductory set (Portal, etc)
-
-            * box - A gift box set
-
-            * promo - A set that contains purely promotional cards
-
-            * token - A set made up of tokens and emblems.
-
-            * memorabilia - A set made up of gold-bordered, oversize, or trophy
-            cards that are not legal
-          x-ms-enum:
-            name: SetTypes
-            modelAsString: false
+          $ref: "#/components/schemas/set_type"
         released_at:
           type: string
           format: date
@@ -1190,18 +1137,21 @@ components:
             cards in this set.
           example: >-
             https://api.scryfall.com/cards/search?order=set&q=e%3Aaer&unique=prints
+    ruling_source:
+      type: string
+      description: >-
+        A computer-readable string indicating which company produced this
+        ruling.
+      enum:
+        - wotc
+        - scryfall
+      example: wotc
+
     ruling:
       type: object
       properties:
         source:
-          type: string
-          description: >-
-            A computer-readable string indicating which company produced this
-            ruling.
-          enum:
-            - wotc
-            - scryfall
-          example: wotc
+          $ref: "#/components/schemas/ruling_source"
         published_at:
           format: date
           type: string
@@ -1234,7 +1184,7 @@ components:
         funny:
           type: boolean
         colors:
-          $ref: '#/components/schemas/colors'
+          $ref: '#/components/schemas/color'
     mana_cost:
       type: object
       properties:
@@ -1244,7 +1194,7 @@ components:
           format: double
           type: number
         colors:
-          $ref: '#/components/schemas/colors'
+          $ref: '#/components/schemas/color'
         colorless:
           type: boolean
         monocolored:
@@ -1440,12 +1390,9 @@ components:
       required: false
       schema:
         type: string
-        enum:
-          - json
-        example: json
-        x-ms-enum:
-          name: OutputFormat
-          modelAsString: false
+        # enum:
+        #   - json
+        # example: json
     pretty:
       name: pretty
       description: >-
