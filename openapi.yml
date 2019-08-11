@@ -879,6 +879,7 @@ components:
         - art_crop
         - border_crop
     card:
+      type: object
       allOf:
         - $ref: "#/components/schemas/card_face"
         - type: object
